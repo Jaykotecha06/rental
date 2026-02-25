@@ -157,10 +157,7 @@ const Dashboard = () => {
             <p>Welcome back, {user?.name || 'User'}! Here's your property overview.</p>
           </div>
           <div className="header-right">
-            <div className="notification-badge">
-              <FaBell />
-              <span className="badge">3</span>
-            </div>
+            
             <div className="user-profile">
               <FaUserCircle className="user-avatar" />
               <div className="user-info">
