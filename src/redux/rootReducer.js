@@ -5,6 +5,8 @@ import lightBillReducer from './reducers/lightBillReducer';
 import depositReducer from './reducers/depositReducer';
 import expenseReducer from './reducers/expenseReducer';
 import documentReducer from './reducers/documentReducer';
+import rentalDetailsReducer from './reducers/rentalDetailsReducer'; // नया import
+
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -12,7 +14,9 @@ const rootReducer = combineReducers({
   lightBill: lightBillReducer,
   deposit: depositReducer,
   expense: expenseReducer,
-  document: documentReducer
+  document: documentReducer,
+  rentalDetails: rentalDetailsReducer // नया reducer
+
 });
 
 export default rootReducer;

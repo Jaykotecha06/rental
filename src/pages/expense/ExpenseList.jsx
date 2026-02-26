@@ -54,13 +54,13 @@ const ExpenseList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (selectedExpense) {
       await dispatch(updateExpense(selectedExpense.id, formData));
     } else {
       await dispatch(addExpense(formData, user.uid));
     }
-    
+
     setShowModal(false);
     resetForm();
   };
@@ -95,7 +95,7 @@ const ExpenseList = () => {
   };
 
   const getExpenseTypeBadge = (type) => {
-    return type === 'homeexpense' 
+    return type === 'homeexpense'
       ? <Badge bg="primary">Home Expense</Badge>
       : <Badge bg="success">Property Expense</Badge>;
   };
@@ -130,27 +130,27 @@ const ExpenseList = () => {
                   <tr key={expense.id}>
                     <td>{getExpenseTypeBadge(expense.type)}</td>
                     <td>
-                      {expense.type === 'homeexpense' 
-                        ? expense.expenseType 
+                      {expense.type === 'homeexpense'
+                        ? expense.expenseType
                         : `Property: ${expense.property}`}
                     </td>
                     <td>₹{expense.amount}</td>
                     <td>{expense.date}</td>
                     <td>{expense.takenPerson}</td>
                     <td>
-                      <Button 
+                      <Button
                         variant="info" size="sm" className="me-2"
                         onClick={() => handleView(expense)}
                       >
                         <FaEye />
                       </Button>
-                      <Button 
+                      <Button
                         variant="warning" size="sm" className="me-2"
                         onClick={() => handleEdit(expense)}
                       >
                         <FaEdit />
                       </Button>
-                      <Button 
+                      <Button
                         variant="danger" size="sm"
                         onClick={() => handleDelete(expense.id)}
                       >
@@ -299,8 +299,8 @@ const ExpenseList = () => {
                 <>
                   <p><strong>Expense Type:</strong> {selectedExpense.type === 'homeexpense' ? 'Home Expense' : 'Property Expense'}</p>
                   <p><strong>Category/Property:</strong> {
-                    selectedExpense.type === 'homeexpense' 
-                      ? selectedExpense.expenseType 
+                    selectedExpense.type === 'homeexpense'
+                      ? selectedExpense.expenseType
                       : `Property: ${selectedExpense.property}`
                   }</p>
                   <p><strong>Amount:</strong> ₹{selectedExpense.amount}</p>

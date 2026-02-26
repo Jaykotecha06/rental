@@ -8,12 +8,12 @@
   top: 0;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-header {
   padding: 25px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
 }
 
@@ -34,7 +34,7 @@
   display: flex;
   align-items: center;
   padding: 12px 25px;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   transition: all 0.3s;
   margin: 5px 10px;
@@ -42,7 +42,7 @@
 }
 
 .menu-item:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   color: white;
   transform: translateX(5px);
 }
@@ -50,7 +50,7 @@
 .menu-item.active {
   background: white;
   color: #3498db;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .menu-item.active .menu-icon {
@@ -71,13 +71,13 @@
 
 .sidebar-footer {
   padding: 20px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logout-btn {
   width: 100%;
   padding: 12px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 8px;
   color: white;
@@ -91,7 +91,7 @@
 }
 
 .logout-btn:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
 }
 
@@ -101,16 +101,16 @@
 }
 
 .sidebar-menu::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-menu::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 5px;
 }
 
 .sidebar-menu::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.5);
 }
 
 /* Responsive */
@@ -118,20 +118,20 @@
   .sidebar {
     width: 70px;
   }
-  
+
   .sidebar-header h3 {
     display: none;
   }
-  
+
   .menu-text {
     display: none;
   }
-  
+
   .menu-icon {
     margin-right: 0;
     font-size: 1.5rem;
   }
-  
+
   .logout-btn span {
     display: none;
   }

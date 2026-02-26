@@ -1,9 +1,9 @@
-import { 
-  LOGIN_SUCCESS, 
-  LOGIN_FAIL, 
-  LOGOUT, 
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT,
   SET_LOADING,
-  STOP_LOADING 
+  STOP_LOADING
 } from '../actions/authActions';
 
 const initialState = {
@@ -23,7 +23,7 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         error: null
       };
-      
+
     case LOGIN_FAIL:
       return {
         ...state,
@@ -32,7 +32,7 @@ const authReducer = (state = initialState, action) => {
         user: null,
         loading: false
       };
-      
+
     case LOGOUT:
       return {
         ...state,
@@ -41,19 +41,19 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         error: null
       };
-      
+
     case SET_LOADING:
       return {
         ...state,
         loading: true
       };
-      
+
     case STOP_LOADING:
       return {
         ...state,
         loading: false
       };
-      
+
     default:
       return state;
   }

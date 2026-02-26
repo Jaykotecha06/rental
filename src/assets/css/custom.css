@@ -1,7 +1,7 @@
 /* Custom Styles */
 .sidebar {
   min-height: 100vh;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar .nav-link {
@@ -12,7 +12,7 @@
 }
 
 .sidebar .nav-link:hover {
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .sidebar .nav-link.active {
@@ -28,7 +28,7 @@
 .card {
   border: none;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.08);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s;
 }
 
@@ -66,9 +66,10 @@
   border-top: 1px solid #dee2e6;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .badge {
@@ -85,20 +86,20 @@
     left: -250px;
     transition: left 0.3s;
   }
-  
+
   .sidebar.show {
     left: 0;
   }
-  
+
   .main-content {
     width: 100% !important;
     margin-left: 0 !important;
   }
-  
+
   .table-responsive {
     font-size: 0.9rem;
   }
-  
+
   .btn-sm {
     padding: 0.2rem 0.4rem;
   }
@@ -110,6 +111,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

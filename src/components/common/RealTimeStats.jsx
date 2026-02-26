@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Row, Col, Card } from 'react-bootstrap';
-import { 
-  FaHome, 
-  FaLightbulb, 
-  FaMoneyBill, 
-  FaWallet, 
-  FaFileAlt 
+import {
+  FaHome,
+  FaLightbulb,
+  FaMoneyBill,
+  FaWallet,
+  FaFileAlt
 } from 'react-icons/fa';
 import { realtimeService } from '../../services/realtimeService';
 
@@ -95,36 +95,36 @@ const RealTimeStats = () => {
 
   return (
     <Row>
-      <StatCard 
-        title="Rent" 
-        count={stats.totalRents} 
-        icon={FaHome} 
+      <StatCard
+        title="Rent"
+        count={stats.totalRents}
+        icon={FaHome}
         color="#007bff"
         amount={stats.totalRentAmount}
       />
-      <StatCard 
-        title="Light Bills" 
-        count={stats.totalLightBills} 
-        icon={FaLightbulb} 
+      <StatCard
+        title="Light Bills"
+        count={stats.totalLightBills}
+        icon={FaLightbulb}
         color="#ffc107"
       />
-      <StatCard 
-        title="Deposits" 
-        count={stats.totalDeposits} 
-        icon={FaMoneyBill} 
+      <StatCard
+        title="Deposits"
+        count={stats.totalDeposits}
+        icon={FaMoneyBill}
         color="#28a745"
       />
-      <StatCard 
-        title="Expenses" 
-        count={stats.totalExpenses} 
-        icon={FaWallet} 
+      <StatCard
+        title="Expenses"
+        count={stats.totalExpenses}
+        icon={FaWallet}
         color="#dc3545"
         amount={stats.totalExpenseAmount}
       />
-      <StatCard 
-        title="Documents" 
-        count={stats.totalDocuments} 
-        icon={FaFileAlt} 
+      <StatCard
+        title="Documents"
+        count={stats.totalDocuments}
+        icon={FaFileAlt}
         color="#17a2b8"
       />
     </Row>

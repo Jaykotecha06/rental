@@ -8,7 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector(state => state.auth);
@@ -16,7 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLocalError('');
-    
+
     if (!email || !password) {
       setLocalError('Please fill all fields');
       return;
@@ -33,7 +33,7 @@ const Login = () => {
       <Card style={{ width: '400px' }} className="shadow">
         <Card.Body className="p-5">
           <h3 className="text-center mb-4">Login</h3>
-          
+
           {(localError || error) && (
             <Alert variant="danger">{localError || error}</Alert>
           )}

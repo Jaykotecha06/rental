@@ -20,6 +20,8 @@ import DepositList from './pages/deposit/DepositList';
 import ExpenseList from './pages/expense/ExpenseList';
 import DocumentList from './pages/document/DocumentList';
 import PrivateRoute from './components/common/PrivateRoute';
+import RentalDetailsList from './pages/rentalDetails/RentalDetailsList';
+
 
 // Auth State Listener Component
 function AuthListener({ children }) {
@@ -28,11 +30,11 @@ function AuthListener({ children }) {
 
   useEffect(() => {
     console.log('🔄 Setting up auth state listener...');
-    
+
     // Listen for auth state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       console.log('📋 Auth state changed:', user ? 'User logged in' : 'User logged out');
-      
+
       if (user) {
         // User is signed in
         const userData = {
@@ -47,7 +49,7 @@ function AuthListener({ children }) {
         console.log('❌ No authenticated user');
         dispatch(logout());
       }
-      
+
       setIsAuthChecked(true);
     });
 
@@ -92,14 +94,20 @@ function AppContent() {
       <Route path="/signup" element={
         isAuthenticated ? <Navigate to="/dashboard" replace /> : <Signup />
       } />
-      
+
       {/* Root redirect */}
       <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />} />
-      
+
       {/* Private Routes */}
       <Route path="/dashboard" element={
         <PrivateRoute>
           <Dashboard />
+        </PrivateRoute>
+      } />
+
+      <Route path="/rental-details" element={
+        <PrivateRoute>
+          <RentalDetailsList />
         </PrivateRoute>
       } />
       <Route path="/rent" element={
@@ -137,8 +145,8 @@ function App() {
       <Router>
         <AuthListener>
           <div className="App">
-            <ToastContainer 
-              position="top-right" 
+            <ToastContainer
+              position="top-right"
               autoClose={3000}
               hideProgressBar={false}
               newestOnTop

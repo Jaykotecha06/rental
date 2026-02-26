@@ -1,5 +1,5 @@
-import { 
-  createUserWithEmailAndPassword, 
+import {
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   updateProfile
@@ -11,14 +11,14 @@ class AuthService {
   async signup(name, email, password) {
     try {
       console.log('📝 Attempting signup for:', email);
-      
+
       // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
+
       // Update profile with name
       await updateProfile(user, { displayName: name });
-      
+
       // Save user data to Realtime Database
       await set(ref(db, `users/${user.uid}`), {
         name,
@@ -27,9 +27,9 @@ class AuthService {
         createdAt: new Date().toISOString(),
         lastLogin: new Date().toISOString()
       });
-      
+
       console.log('✅ Signup successful for:', user.uid);
-      
+
       return {
         uid: user.uid,
         email: user.email,
@@ -44,15 +44,15 @@ class AuthService {
   async login(email, password) {
     try {
       console.log('🔑 Attempting login for:', email);
-      
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
+
       // Update last login
       await set(ref(db, `users/${user.uid}/lastLogin`), new Date().toISOString());
-      
+
       console.log('✅ Login successful for:', user.uid);
-      
+
       return {
         uid: user.uid,
         email: user.email,
@@ -65,16 +65,16 @@ class AuthService {
   }
 
   async logout() {
-  try {
-    await signOut(auth);
-    console.log('✅ Logout successful');
-    // Clear any local storage items if needed
-    localStorage.removeItem('persist:root'); // अगर redux persist use कर रहे हैं
-  } catch (error) {
-    console.error('❌ Logout error:', error);
-    throw error;
+    try {
+      await signOut(auth);
+      console.log('✅ Logout successful');
+      // Clear any local storage items if needed
+      localStorage.removeItem('persist:root'); // अगर redux persist use कर रहे हैं
+    } catch (error) {
+      console.error('❌ Logout error:', error);
+      throw error;
+    }
   }
-}
 
   handleError(error) {
     let message = 'An error occurred';

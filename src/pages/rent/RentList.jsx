@@ -5,6 +5,7 @@ import { FaEdit, FaTrash, FaPlus, FaEye } from 'react-icons/fa';
 import Sidebar from '../../components/common/Sidebar';
 import Header from '../../components/common/Header';
 import { getRents, addRent, updateRent, deleteRent } from '../../redux/actions/rentActions';
+import { getRentalDetails } from '../../redux/actions/rentalDetailsActions'; // नया import
 
 const RentList = () => {
   const [showModal, setShowModal] = useState(false);
@@ -14,21 +15,40 @@ const RentList = () => {
     floor: '',
     name: '',
     mobile: '',
-    fromMonth: '',
-    toMonth: '',
+    fromDate: '',
+    toDate: '',
+    paymentDate: '',
     rentAmount: '',
     paymentType: 'cash'
   });
 
   const dispatch = useDispatch();
   const { rents } = useSelector(state => state.rent);
+  const { rentalDetails } = useSelector(state => state.rentalDetails); // Rental details से data
   const { user } = useSelector(state => state.auth);
 
   useEffect(() => {
     if (user) {
       dispatch(getRents(user.uid));
+      dispatch(getRentalDetails(user.uid)); // Rental details भी fetch करें
     }
   }, [dispatch, user]);
+
+  // जब floor या name select करें तो monthly rent auto-fill हो
+  const handleRentalSelect = (e) => {
+    const selectedFloor = e.target.value;
+    const rental = rentalDetails.find(r => r.floor === selectedFloor);
+    
+    if (rental) {
+      setFormData({
+        ...formData,
+        floor: rental.floor,
+        name: rental.rentalName,
+        mobile: rental.mobileNo,
+        rentAmount: rental.monthlyRent // Auto-fill monthly rent
+      });
+    }
+  };
 
   const handleInputChange = (e) => {
     setFormData({
@@ -52,7 +72,16 @@ const RentList = () => {
 
   const handleEdit = (rent) => {
     setSelectedRent(rent);
-    setFormData(rent);
+    setFormData({
+      floor: rent.floor || '',
+      name: rent.name || '',
+      mobile: rent.mobile || '',
+      fromDate: rent.fromDate || '',
+      toDate: rent.toDate || '',
+      paymentDate: rent.paymentDate || '',
+      rentAmount: rent.rentAmount || '',
+      paymentType: rent.paymentType || 'cash'
+    });
     setShowModal(true);
   };
 
@@ -72,8 +101,9 @@ const RentList = () => {
       floor: '',
       name: '',
       mobile: '',
-      fromMonth: '',
-      toMonth: '',
+      fromDate: '',
+      toDate: '',
+      paymentDate: '',
       rentAmount: '',
       paymentType: 'cash'
     });
@@ -86,13 +116,30 @@ const RentList = () => {
       cheque: 'warning',
       online: 'info'
     };
-    return <Badge bg={colors[type]}>{type}</Badge>;
+    return <Badge bg={colors[type] || 'secondary'}>{type}</Badge>;
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const formatMonthYear = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString + '-01');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${year}`;
   };
 
   return (
     <div className="d-flex">
       <Sidebar />
-      <div className="flex-grow-1" style={{ marginLeft: '250px' }}>
+      <div className="flex-grow-1" style={{ marginLeft: '250px', padding: '20px' }}>
         <Header />
         <div className="p-4">
           <div className="d-flex justify-content-between align-items-center mb-4">
@@ -109,8 +156,9 @@ const RentList = () => {
                   <th>Floor</th>
                   <th>Name</th>
                   <th>Mobile</th>
-                  <th>From Month</th>
-                  <th>To Month</th>
+                  <th>From Date</th>
+                  <th>To Date</th>
+                  <th>Payment Date</th>
                   <th>Amount</th>
                   <th>Payment Type</th>
                   <th>Actions</th>
@@ -122,8 +170,9 @@ const RentList = () => {
                     <td>{rent.floor}</td>
                     <td>{rent.name}</td>
                     <td>{rent.mobile}</td>
-                    <td>{rent.fromMonth}</td>
-                    <td>{rent.toMonth}</td>
+                    <td>{formatMonthYear(rent.fromDate)}</td>
+                    <td>{formatMonthYear(rent.toDate)}</td>
+                    <td>{formatDate(rent.paymentDate)}</td>
                     <td>₹{rent.rentAmount}</td>
                     <td>{getPaymentTypeBadge(rent.paymentType)}</td>
                     <td>
@@ -150,7 +199,7 @@ const RentList = () => {
                 ))}
                 {rents.length === 0 && (
                   <tr>
-                    <td colSpan="8" className="text-center">No rent records found</td>
+                    <td colSpan="9" className="text-center">No rent records found</td>
                   </tr>
                 )}
               </tbody>
@@ -165,6 +214,28 @@ const RentList = () => {
             <Form onSubmit={handleSubmit}>
               <Modal.Body>
                 <Row>
+                  <Col md={12}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Select Floor (Auto-fill rent)</Form.Label>
+                      <Form.Select
+                        onChange={handleRentalSelect}
+                        value={formData.floor}
+                      >
+                        <option value="">Select floor</option>
+                        {rentalDetails.map((detail) => (
+                          <option key={detail.id} value={detail.floor}>
+                            {detail.floor} - {detail.rentalName} (₹{detail.monthlyRent}/month)
+                          </option>
+                        ))}
+                      </Form.Select>
+                      <Form.Text className="text-muted">
+                        Select floor to auto-fill name, mobile and monthly rent
+                      </Form.Text>
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3">
                       <Form.Label>Floor</Form.Label>
@@ -173,6 +244,7 @@ const RentList = () => {
                         name="floor"
                         value={formData.floor}
                         onChange={handleInputChange}
+                        placeholder="Enter floor number"
                         required
                       />
                     </Form.Group>
@@ -185,6 +257,7 @@ const RentList = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
+                        placeholder="Enter tenant name"
                         required
                       />
                     </Form.Group>
@@ -200,6 +273,7 @@ const RentList = () => {
                         name="mobile"
                         value={formData.mobile}
                         onChange={handleInputChange}
+                        placeholder="Enter mobile number"
                         required
                       />
                     </Form.Group>
@@ -223,11 +297,11 @@ const RentList = () => {
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3">
-                      <Form.Label>From Month</Form.Label>
+                      <Form.Label>From Date</Form.Label>
                       <Form.Control
                         type="month"
-                        name="fromMonth"
-                        value={formData.fromMonth}
+                        name="fromDate"
+                        value={formData.fromDate}
                         onChange={handleInputChange}
                         required
                       />
@@ -235,11 +309,11 @@ const RentList = () => {
                   </Col>
                   <Col md={6}>
                     <Form.Group className="mb-3">
-                      <Form.Label>To Month</Form.Label>
+                      <Form.Label>To Date</Form.Label>
                       <Form.Control
                         type="month"
-                        name="toMonth"
-                        value={formData.toMonth}
+                        name="toDate"
+                        value={formData.toDate}
                         onChange={handleInputChange}
                         required
                       />
@@ -250,12 +324,25 @@ const RentList = () => {
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Rent Amount</Form.Label>
+                      <Form.Label>Payment Date</Form.Label>
+                      <Form.Control
+                        type="date"
+                        name="paymentDate"
+                        value={formData.paymentDate}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Rent Amount (₹)</Form.Label>
                       <Form.Control
                         type="number"
                         name="rentAmount"
                         value={formData.rentAmount}
                         onChange={handleInputChange}
+                        placeholder="Enter rent amount"
                         required
                       />
                     </Form.Group>
@@ -284,9 +371,10 @@ const RentList = () => {
                   <p><strong>Floor:</strong> {selectedRent.floor}</p>
                   <p><strong>Name:</strong> {selectedRent.name}</p>
                   <p><strong>Mobile:</strong> {selectedRent.mobile}</p>
-                  <p><strong>From Month:</strong> {selectedRent.fromMonth}</p>
-                  <p><strong>To Month:</strong> {selectedRent.toMonth}</p>
-                  <p><strong>Amount:</strong> ₹{selectedRent.rentAmount}</p>
+                  <p><strong>From Date:</strong> {formatMonthYear(selectedRent.fromDate)}</p>
+                  <p><strong>To Date:</strong> {formatMonthYear(selectedRent.toDate)}</p>
+                  <p><strong>Payment Date:</strong> {formatDate(selectedRent.paymentDate)}</p>
+                  <p><strong>Rent Amount:</strong> ₹{selectedRent.rentAmount}</p>
                   <p><strong>Payment Type:</strong> {getPaymentTypeBadge(selectedRent.paymentType)}</p>
                 </>
               )}

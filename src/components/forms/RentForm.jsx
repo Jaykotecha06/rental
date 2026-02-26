@@ -6,8 +6,8 @@ const RentForm = ({ onSubmit, initialData = null }) => {
     floor: '',
     name: '',
     mobile: '',
-    fromMonth: '',
-    toMonth: '',
+    fromDate: '',
+    toDate: '',
     rentAmount: '',
     paymentType: 'cash'
   });
@@ -92,9 +92,9 @@ const RentForm = ({ onSubmit, initialData = null }) => {
           <Form.Group className="mb-3">
             <Form.Label>From Month</Form.Label>
             <Form.Control
-              type="month"
-              name="fromMonth"
-              value={formData.fromMonth}
+              type="date"
+              name="fromDate"
+              value={formData.fromDate}
               onChange={handleChange}
               required
             />
@@ -104,9 +104,9 @@ const RentForm = ({ onSubmit, initialData = null }) => {
           <Form.Group className="mb-3">
             <Form.Label>To Month</Form.Label>
             <Form.Control
-              type="month"
-              name="toMonth"
-              value={formData.toMonth}
+              type="date"
+              name="toDate"
+              value={formData.toDate}
               onChange={handleChange}
               required
             />

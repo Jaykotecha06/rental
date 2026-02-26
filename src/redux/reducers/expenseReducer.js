@@ -22,7 +22,7 @@ const expenseReducer = (state = initialState, action) => {
     case types.UPDATE_EXPENSE:
       return {
         ...state,
-        expenses: state.expenses.map(expense => 
+        expenses: state.expenses.map(expense =>
           expense.id === action.payload.id ? action.payload : expense
         )
       };

@@ -1,17 +1,17 @@
 import { db } from './firebase';
-import { 
-  ref, 
-  set, 
-  update, 
-  remove, 
-  get, 
+import {
+  ref,
+  set,
+  update,
+  remove,
+  get,
   child,
   push,
   query,
   orderByChild,
   equalTo,
   onValue,
-  off 
+  off
 } from 'firebase/database';
 
 class RealtimeService {
@@ -27,7 +27,7 @@ class RealtimeService {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
-      
+
       await set(newRef, newData);
       return newData;
     } catch (error) {
@@ -47,7 +47,7 @@ class RealtimeService {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
-      
+
       await set(itemRef, newData);
       return newData;
     } catch (error) {
@@ -64,7 +64,7 @@ class RealtimeService {
         ...data,
         updatedAt: new Date().toISOString()
       };
-      
+
       await update(itemRef, updateData);
       return { id, ...updateData };
     } catch (error) {
@@ -90,7 +90,7 @@ class RealtimeService {
     try {
       const itemRef = ref(db, `${collection}/${id}`);
       const snapshot = await get(itemRef);
-      
+
       if (snapshot.exists()) {
         return { id, ...snapshot.val() };
       }
@@ -110,15 +110,15 @@ class RealtimeService {
         orderByChild('userId'),
         equalTo(userId)
       );
-      
+
       const snapshot = await get(userQuery);
-      
+
       if (snapshot.exists()) {
         const data = snapshot.val();
         return Object.keys(data).map(key => ({
           id: key,
           ...data[key]
-        })).sort((a, b) => 
+        })).sort((a, b) =>
           new Date(b.createdAt) - new Date(a.createdAt)
         );
       }
@@ -137,14 +137,14 @@ class RealtimeService {
       orderByChild('userId'),
       equalTo(userId)
     );
-    
+
     const listener = onValue(userQuery, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
         const items = Object.keys(data).map(key => ({
           id: key,
           ...data[key]
-        })).sort((a, b) => 
+        })).sort((a, b) =>
           new Date(b.createdAt) - new Date(a.createdAt)
         );
         callback(items);
@@ -152,7 +152,7 @@ class RealtimeService {
         callback([]);
       }
     });
-    
+
     // Return unsubscribe function
     return () => off(userQuery, 'value', listener);
   }
@@ -160,7 +160,7 @@ class RealtimeService {
   // Real-time listener for single item
   listenToItem(collection, id, callback) {
     const itemRef = ref(db, `${collection}/${id}`);
-    
+
     const listener = onValue(itemRef, (snapshot) => {
       if (snapshot.exists()) {
         callback({ id, ...snapshot.val() });
@@ -168,7 +168,7 @@ class RealtimeService {
         callback(null);
       }
     });
-    
+
     // Return unsubscribe function
     return () => off(itemRef, 'value', listener);
   }
@@ -182,9 +182,9 @@ class RealtimeService {
         orderByChild(field),
         equalTo(value)
       );
-      
+
       const snapshot = await get(searchQuery);
-      
+
       if (snapshot.exists()) {
         const data = snapshot.val();
         return Object.keys(data).map(key => ({
@@ -217,14 +217,14 @@ class RealtimeService {
   async batchUpdate(collection, updates) {
     try {
       const updatesObj = {};
-      
+
       updates.forEach(({ id, data }) => {
         updatesObj[`${collection}/${id}`] = {
           ...data,
           updatedAt: new Date().toISOString()
         };
       });
-      
+
       await update(ref(db), updatesObj);
       return updates;
     } catch (error) {

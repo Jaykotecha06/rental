@@ -1,14 +1,17 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { 
-  FaTachometerAlt, 
-  FaHome, 
-  FaLightbulb, 
-  FaMoneyBill, 
-  FaWallet, 
+import {
+  FaTachometerAlt,
+  FaHome,
+  FaLightbulb,
+  FaMoneyBill,
+  FaWallet,
   FaFileAlt,
   FaSignOutAlt,
+  FaCog,
+  FaMoneyBillWave,
+  FaBuilding,           // ये import करें
   FaUserCircle
 } from 'react-icons/fa';
 import { logout } from '../../redux/actions/authActions';
@@ -25,7 +28,9 @@ const Sidebar = () => {
 
   const menuItems = [
     { path: '/dashboard', name: 'Dashboard', icon: <FaTachometerAlt /> },
+    { path: '/rental-details', name: 'Rental Details', icon: <FaBuilding /> },
     { path: '/rent', name: 'Rent', icon: <FaHome /> },
+
     { path: '/lightbill', name: 'Light Bill', icon: <FaLightbulb /> },
     { path: '/deposit', name: 'Deposit', icon: <FaMoneyBill /> },
     { path: '/expense', name: 'Expense', icon: <FaWallet /> },
@@ -37,11 +42,11 @@ const Sidebar = () => {
       <div className="sidebar-header">
         <h3>Rental Manager</h3>
       </div>
-      
+
       <div className="sidebar-menu">
         {menuItems.map((item, index) => (
-          <NavLink 
-            to={item.path} 
+          <NavLink
+            to={item.path}
             key={index}
             className={({ isActive }) => isActive ? 'menu-item active' : 'menu-item'}
           >

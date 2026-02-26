@@ -22,7 +22,7 @@ const documentReducer = (state = initialState, action) => {
     case types.UPDATE_DOCUMENT:
       return {
         ...state,
-        documents: state.documents.map(doc => 
+        documents: state.documents.map(doc =>
           doc.id === action.payload.id ? action.payload : doc
         )
       };

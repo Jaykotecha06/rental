@@ -19,7 +19,6 @@ const LightBillList = () => {
     currentUnit: '',
     lastUnitDate: '',
     currentUnitDate: '',
-    depositAmount: '',
     amountType: 'cash'
   });
 
@@ -64,13 +63,13 @@ const LightBillList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (selectedBill) {
       await dispatch(updateLightBill(selectedBill.id, formData));
     } else {
       await dispatch(addLightBill(formData, user.uid));
     }
-    
+
     setShowModal(false);
     resetForm();
   };
@@ -100,7 +99,6 @@ const LightBillList = () => {
       currentUnit: '',
       lastUnitDate: '',
       currentUnitDate: '',
-      depositAmount: '',
       amountType: 'cash'
     });
     setSelectedBill(null);
@@ -139,7 +137,6 @@ const LightBillList = () => {
                   <th>Current Unit</th>
                   <th>Units Used</th>
                   <th>Amount</th>
-                  <th>Deposit</th>
                   <th>Type</th>
                   <th>Actions</th>
                 </tr>
@@ -155,22 +152,21 @@ const LightBillList = () => {
                       <td>{bill.currentUnit}</td>
                       <td>{unitsUsed}</td>
                       <td>₹{bill.amount}</td>
-                      <td>₹{bill.depositAmount}</td>
                       <td>{getAmountTypeBadge(bill.amountType)}</td>
                       <td>
-                        <Button 
+                        <Button
                           variant="info" size="sm" className="me-2"
                           onClick={() => handleView(bill)}
                         >
                           <FaEye />
                         </Button>
-                        <Button 
+                        <Button
                           variant="warning" size="sm" className="me-2"
                           onClick={() => handleEdit(bill)}
                         >
                           <FaEdit />
                         </Button>
-                        <Button 
+                        <Button
                           variant="danger" size="sm"
                           onClick={() => handleDelete(bill.id)}
                         >
@@ -308,18 +304,7 @@ const LightBillList = () => {
                 )}
 
                 <Row>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Deposit Amount</Form.Label>
-                      <Form.Control
-                        type="number"
-                        name="depositAmount"
-                        value={formData.depositAmount}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
+
                   <Col md={6}>
                     <Form.Group className="mb-3">
                       <Form.Label>Amount Type</Form.Label>
@@ -361,7 +346,6 @@ const LightBillList = () => {
                   <p><strong>Current Unit:</strong> {selectedBill.currentUnit} ({selectedBill.currentUnitDate})</p>
                   <p><strong>Units Used:</strong> {parseFloat(selectedBill.currentUnit) - parseFloat(selectedBill.lastUnit)}</p>
                   <p><strong>Amount:</strong> ₹{selectedBill.amount}</p>
-                  <p><strong>Deposit Amount:</strong> ₹{selectedBill.depositAmount}</p>
                   <p><strong>Amount Type:</strong> {getAmountTypeBadge(selectedBill.amountType)}</p>
                 </>
               )}

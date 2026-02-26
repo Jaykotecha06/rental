@@ -5,18 +5,18 @@ export const storageService = {
   async uploadFile(file, path) {
     try {
       console.log('Uploading file to path:', path);
-      
+
       // Create storage reference
       const storageRef = ref(storage, path);
-      
+
       // Upload file
       const snapshot = await uploadBytes(storageRef, file);
       console.log('File uploaded successfully');
-      
+
       // Get download URL
       const url = await getDownloadURL(snapshot.ref);
       console.log('File URL:', url);
-      
+
       return url;
     } catch (error) {
       console.error('Error uploading file:', error);

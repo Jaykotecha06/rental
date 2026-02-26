@@ -51,7 +51,7 @@ const Signup = () => {
       <Card style={{ width: '450px' }} className="shadow">
         <Card.Body className="p-5">
           <h3 className="text-center mb-4">Sign Up</h3>
-          
+
           {(localError || error) && (
             <Alert variant="danger">{localError || error}</Alert>
           )}

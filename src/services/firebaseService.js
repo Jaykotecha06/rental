@@ -14,7 +14,7 @@ class FirebaseService {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
-      
+
       await set(newRef, newData);
       return newData;
     } catch (error) {
@@ -31,7 +31,7 @@ class FirebaseService {
         ...data,
         updatedAt: new Date().toISOString()
       };
-      
+
       await update(itemRef, updateData);
       return { id, ...updateData };
     } catch (error) {
@@ -61,9 +61,9 @@ class FirebaseService {
         orderByChild('userId'),
         equalTo(userId)
       );
-      
+
       const snapshot = await get(userQuery);
-      
+
       if (snapshot.exists()) {
         const data = snapshot.val();
         return Object.keys(data).map(key => ({
@@ -83,7 +83,7 @@ class FirebaseService {
     try {
       const itemRef = ref(db, `${collection}/${id}`);
       const snapshot = await get(itemRef);
-      
+
       if (snapshot.exists()) {
         return { id, ...snapshot.val() };
       }

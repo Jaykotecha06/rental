@@ -22,7 +22,7 @@ const rentReducer = (state = initialState, action) => {
     case types.UPDATE_RENT:
       return {
         ...state,
-        rents: state.rents.map(rent => 
+        rents: state.rents.map(rent =>
           rent.id === action.payload.id ? action.payload : rent
         )
       };

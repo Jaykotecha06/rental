@@ -61,13 +61,13 @@ const DocumentList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (selectedDocument) {
       await dispatch(updateDocument(selectedDocument.id, formData, files));
     } else {
       await dispatch(addDocument(formData, user.uid, files));
     }
-    
+
     setShowModal(false);
     resetForm();
   };
@@ -146,9 +146,9 @@ const DocumentList = () => {
                     <td>{doc.aadhar || 'N/A'}</td>
                     <td>
                       {doc.pancardUrl && (
-                        <Button 
-                          variant="link" 
-                          size="sm" 
+                        <Button
+                          variant="link"
+                          size="sm"
                           className="me-2 text-primary"
                           onClick={() => openDocument(doc.pancardUrl)}
                         >
@@ -156,8 +156,8 @@ const DocumentList = () => {
                         </Button>
                       )}
                       {doc.aadharUrl && (
-                        <Button 
-                          variant="link" 
+                        <Button
+                          variant="link"
                           size="sm"
                           className="text-success"
                           onClick={() => openDocument(doc.aadharUrl)}
@@ -167,19 +167,19 @@ const DocumentList = () => {
                       )}
                     </td>
                     <td>
-                      <Button 
+                      <Button
                         variant="info" size="sm" className="me-2"
                         onClick={() => handleView(doc)}
                       >
                         <FaEye />
                       </Button>
-                      <Button 
+                      <Button
                         variant="warning" size="sm" className="me-2"
                         onClick={() => handleEdit(doc)}
                       >
                         <FaEdit />
                       </Button>
-                      <Button 
+                      <Button
                         variant="danger" size="sm"
                         onClick={() => handleDelete(doc.id)}
                       >
@@ -332,15 +332,15 @@ const DocumentList = () => {
                       <p><strong>Name:</strong> {selectedDocument.name}</p>
                     </Col>
                   </Row>
-                  
+
                   <Row className="mt-3">
                     <Col md={6}>
                       <div className="border p-3 rounded">
                         <h5>PAN Card Details</h5>
                         <p><strong>Number:</strong> {selectedDocument.pancard || 'N/A'}</p>
                         {selectedDocument.pancardUrl && (
-                          <Button 
-                            variant="primary" 
+                          <Button
+                            variant="primary"
                             size="sm"
                             onClick={() => openDocument(selectedDocument.pancardUrl)}
                           >
@@ -354,8 +354,8 @@ const DocumentList = () => {
                         <h5>Aadhar Card Details</h5>
                         <p><strong>Number:</strong> {selectedDocument.aadhar || 'N/A'}</p>
                         {selectedDocument.aadharUrl && (
-                          <Button 
-                            variant="success" 
+                          <Button
+                            variant="success"
                             size="sm"
                             onClick={() => openDocument(selectedDocument.aadharUrl)}
                           >

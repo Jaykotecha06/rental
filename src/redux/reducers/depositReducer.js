@@ -22,7 +22,7 @@ const depositReducer = (state = initialState, action) => {
     case types.UPDATE_DEPOSIT:
       return {
         ...state,
-        deposits: state.deposits.map(deposit => 
+        deposits: state.deposits.map(deposit =>
           deposit.id === action.payload.id ? action.payload : deposit
         )
       };

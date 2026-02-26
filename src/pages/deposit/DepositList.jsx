@@ -5,7 +5,7 @@ import { FaEdit, FaTrash, FaPlus, FaEye } from 'react-icons/fa';
 import Sidebar from '../../components/common/Sidebar';
 import Header from '../../components/common/Header';
 import { getDeposits, addDeposit, updateDeposit, deleteDeposit } from '../../redux/actions/depositActions';
-import { getRents } from '../../redux/actions/rentActions';
+import { getRentalDetails } from '../../redux/actions/rentalDetailsActions'; // नया import
 
 const DepositList = () => {
   const [showModal, setShowModal] = useState(false);
@@ -21,15 +21,30 @@ const DepositList = () => {
 
   const dispatch = useDispatch();
   const { deposits } = useSelector(state => state.deposit);
-  const { rents } = useSelector(state => state.rent);
+  const { rentalDetails } = useSelector(state => state.rentalDetails); // Rental details से data
   const { user } = useSelector(state => state.auth);
 
   useEffect(() => {
     if (user) {
       dispatch(getDeposits(user.uid));
-      dispatch(getRents(user.uid));
+      dispatch(getRentalDetails(user.uid)); // Rental details भी fetch करें
     }
   }, [dispatch, user]);
+
+  // जब floor select करें तो deposit amount auto-fill हो
+  const handleRentalSelect = (e) => {
+    const selectedFloor = e.target.value;
+    const rental = rentalDetails.find(r => r.floor === selectedFloor);
+
+    if (rental) {
+      setFormData({
+        ...formData,
+        floor: rental.floor,
+        name: rental.rentalName,
+        depositAmount: rental.depositAmount // Auto-fill deposit amount
+      });
+    }
+  };
 
   const handleInputChange = (e) => {
     setFormData({
@@ -38,33 +53,28 @@ const DepositList = () => {
     });
   };
 
-  const handleTenantSelect = (e) => {
-    const selectedTenant = rents.find(r => r.name === e.target.value);
-    if (selectedTenant) {
-      setFormData({
-        ...formData,
-        name: selectedTenant.name,
-        floor: selectedTenant.floor
-      });
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (selectedDeposit) {
       await dispatch(updateDeposit(selectedDeposit.id, formData));
     } else {
       await dispatch(addDeposit(formData, user.uid));
     }
-    
+
     setShowModal(false);
     resetForm();
   };
 
   const handleEdit = (deposit) => {
     setSelectedDeposit(deposit);
-    setFormData(deposit);
+    setFormData({
+      floor: deposit.floor || '',
+      name: deposit.name || '',
+      joiningDate: deposit.joiningDate || '',
+      depositAmount: deposit.depositAmount || '',
+      amountType: deposit.amountType || 'cash'
+    });
     setShowModal(true);
   };
 
@@ -96,13 +106,13 @@ const DepositList = () => {
       cheque: 'warning',
       online: 'info'
     };
-    return <Badge bg={colors[type]}>{type}</Badge>;
+    return <Badge bg={colors[type] || 'secondary'}>{type}</Badge>;
   };
 
   return (
     <div className="d-flex">
       <Sidebar />
-      <div className="flex-grow-1" style={{ marginLeft: '260px', padding: '20px' }}>
+      <div className="flex-grow-1" style={{ marginLeft: '250px', padding: '20px' }}>
         <Header />
         <div className="p-4">
           <div className="d-flex justify-content-between align-items-center mb-4">
@@ -133,19 +143,19 @@ const DepositList = () => {
                     <td>₹{deposit.depositAmount}</td>
                     <td>{getAmountTypeBadge(deposit.amountType)}</td>
                     <td>
-                      <Button 
+                      <Button
                         variant="info" size="sm" className="me-2"
                         onClick={() => handleView(deposit)}
                       >
                         <FaEye />
                       </Button>
-                      <Button 
+                      <Button
                         variant="warning" size="sm" className="me-2"
                         onClick={() => handleEdit(deposit)}
                       >
                         <FaEdit />
                       </Button>
-                      <Button 
+                      <Button
                         variant="danger" size="sm"
                         onClick={() => handleDelete(deposit.id)}
                       >
@@ -171,15 +181,23 @@ const DepositList = () => {
             <Form onSubmit={handleSubmit}>
               <Modal.Body>
                 <Row>
-                  <Col md={6}>
+                  <Col md={12}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Select Tenant</Form.Label>
-                      <Form.Select onChange={handleTenantSelect}>
-                        <option value="">Select tenant</option>
-                        {rents.map((rent, index) => (
-                          <option key={index} value={rent.name}>{rent.name} - {rent.floor}</option>
+                      <Form.Label>Select Floor (Auto-fill deposit)</Form.Label>
+                      <Form.Select
+                        onChange={handleRentalSelect}
+                        value={formData.floor}
+                      >
+                        <option value="">Select floor</option>
+                        {rentalDetails.map((detail) => (
+                          <option key={detail.id} value={detail.floor}>
+                            {detail.floor} - {detail.rentalName} (Deposit: ₹{detail.depositAmount})
+                          </option>
                         ))}
                       </Form.Select>
+                      <Form.Text className="text-muted">
+                        Select floor to auto-fill name and deposit amount
+                      </Form.Text>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -226,7 +244,7 @@ const DepositList = () => {
                   </Col>
                   <Col md={6}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Deposit Amount</Form.Label>
+                      <Form.Label>Deposit Amount (₹)</Form.Label>
                       <Form.Control
                         type="number"
                         name="depositAmount"
